@@ -1,0 +1,62 @@
+| EmpID | Name    | DeptID |
+| ----- | ------- | ------ |
+| 1     | Alice   | 10     |
+| 2     | Bob     | 20     |
+| 3     | Charlie | 30     |
+| 4     | David   | NULL   |
+
+| DeptID | DeptName  |
+| ------ | --------- |
+| 10     | HR        |
+| 20     | IT        |
+| 40     | Marketing |
+
+INNER JOIN
+SELECT e.EmpID, e.Name, d.DeptName
+FROM Employees e
+INNER JOIN Departments d ON e.DeptID = d.DeptID;
+
+RESULT:
+| EmpID | Name  | DeptName |
+| ----- | ----- | -------- |
+| 1     | Alice | HR       |
+| 2     | Bob   | IT       |
+
+LEFT JOIN
+SELECT e.EmpID, e.Name, d.DeptName
+FROM Employees e
+LEFT JOIN Departments d ON e.DeptID = d.DeptID;
+
+RESULT
+| EmpID | Name    | DeptName |
+| ----- | ------- | -------- |
+| 1     | Alice   | HR       |
+| 2     | Bob     | IT       |
+| 3     | Charlie | NULL     |
+| 4     | David   | NULL     |
+
+RIGHT JOIN
+SELECT e.EmpID, e.Name, d.DeptName
+FROM Employees e
+RIGHT JOIN Departments d ON e.DeptID = d.DeptID;
+
+RESULT
+| EmpID | Name  | DeptName  |
+| ----- | ----- | --------- |
+| 1     | Alice | HR        |
+| 2     | Bob   | IT        |
+| NULL  | NULL  | Marketing |
+
+FULL JOIN
+SELECT e.EmpID, e.Name, d.DeptName
+FROM Employees e
+FULL OUTER JOIN Departments d ON e.DeptID = d.DeptID;
+
+RESULT
+| EmpID | Name    | DeptName  |
+| ----- | ------- | --------- |
+| 1     | Alice   | HR        |
+| 2     | Bob     | IT        |
+| 3     | Charlie | NULL      |
+| 4     | David   | NULL      |
+| NULL  | NULL    | Marketing |
