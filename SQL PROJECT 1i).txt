@@ -1,0 +1,58 @@
+BACKUP SCRIPT
+#!/bin/bash
+
+# Configuration
+SOURCE_DIR="/var/www/html"
+BACKUP_DIR="/backups"
+TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+BACKUP_NAME="backup_$TIMESTAMP.tar.gz"
+
+# Create backup directory if it doesn't exist
+mkdir -p "$BACKUP_DIR"
+
+# Create the backup
+tar -czf "$BACKUP_DIR/$BACKUP_NAME" "$SOURCE_DIR"
+
+# Log result
+if [ $? -eq 0 ]; then
+    echo "[$TIMESTAMP] Backup successful: $BACKUP_DIR/$BACKUP_NAME"
+else
+    echo "[$TIMESTAMP] Backup failed!" >&2
+fi
+\
+Output
+[2025-08-29_14-30-00] Backup successful: /backups/backup_2025-08-29_14-30-00.tar.gz
+
+RECOVERY SCRIPT
+#!/bin/bash
+
+# Configuration
+BACKUP_DIR="/backups"
+RESTORE_DIR="/var/www/html"
+LATEST_BACKUP=$(ls -t $BACKUP_DIR/backup_*.tar.gz | head -n 1)
+
+# Optional: restore from specific backup
+if [ -n "$1" ]; then
+    BACKUP_FILE="$1"
+else
+    BACKUP_FILE="$LATEST_BACKUP"
+fi
+
+# Validate
+if [ ! -f "$BACKUP_FILE" ]; then
+    echo "Backup file not found: $BACKUP_FILE"
+    exit 1
+fi
+
+# Restore the backup
+tar -xzf "$BACKUP_FILE" -C /
+
+# Log result
+if [ $? -eq 0 ]; then
+    echo "Restoration successful from: $BACKUP_FILE"
+else
+    echo "Restoration failed!" >&2
+fi
+
+OUTPUT
+Restoration successful from: /backups/backup_2025-08-29_14-30-00.tar.gz
